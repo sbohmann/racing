@@ -21,17 +21,6 @@ window.onload = () => {
 
         let s = spline(...pn, ...tn)
 
-        // for (let t = 0; t <= 1; t += 1 / 16) {
-        //     dot(s.a1(t), '#ff000033', 7)
-        //     dot(s.a2(t), '#ff000033', 7)
-        //     dot(s.a3(t), '#ff000033', 7)
-        // }
-        //
-        // for (let t = 0; t <= 1; t += 1 / 16) {
-        //     dot(s.b2(t), '#0000ff33', 5)
-        //     dot(s.b3(t), '#0000ff33', 5)
-        // }
-
         for (let t = tn[1]; t <= tn[2]; t += 1 / 1024) {
             dot(s.c(t), 'orange', 3)
         }
