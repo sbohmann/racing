@@ -1,0 +1,9 @@
+#screen {
+    display:block;
+    padding: 0;
+    width: 800px;
+    height: 800px;
+    margin: auto;
+    border: 1px solid black;
+    background: #ddeeff;
+}
