@@ -2,30 +2,61 @@ window.onload = () => {
     let screen = document.getElementById('screen')
     let g = screen.getContext('2d')
 
-    let p = [
-        point(25, 25),
-        point(100, 75),
-        point(125, 25),
-        point(175, 125)]
 
-    for (let n = 0; n <= 3; ++n) {
-        dot(p[n], '#000000')
+    let allPoints = [
+        point(125, 125),
+        point(200, 175),
+        point(225, 125),
+        point(275, 225),
+        point(275, 525)
+    ]
+
+    function paintSpline(pn) {
+        let tn = [
+            0,
+            0.25,
+            0.5,
+            1
+        ]
+
+        let s = spline(...pn, ...tn)
+
+        // for (let t = 0; t <= 1; t += 1 / 16) {
+        //     dot(s.a1(t), '#ff000033', 7)
+        //     dot(s.a2(t), '#ff000033', 7)
+        //     dot(s.a3(t), '#ff000033', 7)
+        // }
+        //
+        // for (let t = 0; t <= 1; t += 1 / 16) {
+        //     dot(s.b2(t), '#0000ff33', 5)
+        //     dot(s.b3(t), '#0000ff33', 5)
+        // }
+
+        for (let t = tn[1]; t <= tn[2]; t += 1 / 1024) {
+            dot(s.c(t), 'orange', 3)
+        }
     }
 
-    let s = spline(p0, p1, p2, p3)
+    for (let n = 0; n < allPoints.length; ++n) {
+        dot(allPoints[n], '#000000', 12)
+    }
 
-    for (let t = 0; t <= 1; t += 1 / 4) {
-        dot(s.a1(t), 'red')
-        // console.log(t, s.a1(t))
+    for (let pointIndex = 0; pointIndex < allPoints.length; ++pointIndex) {
+        let pn = []
+        for (let offset = 0; offset < 4; ++offset) {
+            let subIndex = (pointIndex + offset) % allPoints.length
+            pn.push(allPoints[subIndex])
+        }
+        paintSpline(pn)
     }
 
     function point(x, y) {
         return {x, y}
     }
 
-    function dot(p, color) {
+    function dot(p, color, r) {
         g.beginPath()
-        g.arc(p.x, p.y, 5, 0, 2 * Math.PI)
+        g.arc(p.x, p.y, r, 0, 2 * Math.PI)
         g.fillStyle = color;
         g.fill()
         g.closePath()
@@ -46,38 +77,36 @@ function add(a, b) {
     }
 }
 
-function interpolate(a, b, t) {
-    return mul(
-        add(
-            mul(a, (1 - t)),
-            mul(b, t)
-        ),
-        1 / 2)
+function interpolate(a, b, ta, tb, t) {
+    return add(
+        mul(a, (tb - t) / (tb - ta)),
+        mul(b, (t - ta) / (tb - ta))
+    )
 }
 
-function spline(p0, p1, p2, p3) {
+function spline(p0, p1, p2, p3, t0, t1, t2, t3) {
     function a1(t) {
-        return interpolate(p0, p1, t)
+        return interpolate(p0, p1, t0, t1, t)
     }
 
     function a2(t) {
-        return interpolate(p0, p1, t)
+        return interpolate(p1, p2, t1, t2, t)
     }
 
     function a3(t) {
-        return interpolate(p0, p1, t)
+        return interpolate(p2, p3, t2, t3, t)
     }
 
     function b2(t) {
-        return interpolate(a1(t), a2(t), t)
+        return interpolate(a1(t), a2(t), t0, t2, t)
     }
 
     function b3(t) {
-        return interpolate(a2(t), a3(t), t)
+        return interpolate(a2(t), a3(t), t1, t3, t)
     }
 
     function c(t) {
-        return interpolate(b2(t), b3(t), t)
+        return interpolate(b2(t), b3(t), t1, t2, t)
     }
 
     return {
