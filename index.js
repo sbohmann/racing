@@ -24,7 +24,7 @@ window.onload = () => {
 
         g.beginPath()
         g.moveTo(pn[1].x, pn[1].y)
-        for (let t = tn[1]; t < tn[2]; t += 1) {
+        for (let t = tn[1]; t < tn[2]; t += 3) {
             let p = s.c(t)
             g.lineTo(p.x, p.y)
         }
@@ -33,6 +33,14 @@ window.onload = () => {
         g.lineWidth = 3
         g.stroke()
         g.closePath()
+
+        let dotColor = '#33339933'
+        dot(pn[1], dotColor, 5)
+        for (let t = tn[1]; t < tn[2]; t += 20) {
+            let p = s.c(t)
+            dot(p, dotColor, 5)
+        }
+        dot(pn[2], dotColor, 5)
     }
 
     for (let n = 0; n < allPoints.length; ++n) {
