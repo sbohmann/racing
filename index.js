@@ -13,15 +13,12 @@ window.onload = () => {
 
     function paintSpline(pn) {
         let tn = [
-            0,
-            0.25,
-            0.5,
-            1
+            0, 1, 2, 3
         ]
 
         let s = spline(...pn, ...tn)
 
-        for (let t = tn[1]; t <= tn[2]; t += 1 / 1024) {
+        for (let t = tn[1]; t <= tn[2]; t += (tn[2] - tn[1]) / 128) {
             dot(s.c(t), 'orange', 3)
         }
     }
