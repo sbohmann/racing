@@ -22,9 +22,17 @@ window.onload = () => {
 
         let s = spline(...pn, ...tn)
 
-        for (let t = tn[1]; t <= tn[2]; t += (tn[2] - tn[1]) / 128) {
-            dot(s.c(t), 'orange', 3)
+        g.beginPath()
+        g.moveTo(pn[1].x, pn[1].y)
+        for (let t = tn[1]; t < tn[2]; t += 1) {
+            let p = s.c(t)
+            g.lineTo(p.x, p.y)
         }
+        g.lineTo(pn[2].x, pn[2].y)
+        g.strokeStyle = 'orange'
+        g.lineWidth = 3
+        g.stroke()
+        g.closePath()
     }
 
     for (let n = 0; n < allPoints.length; ++n) {
@@ -47,7 +55,7 @@ window.onload = () => {
     function dot(p, color, r) {
         g.beginPath()
         g.arc(p.x, p.y, r, 0, 2 * Math.PI)
-        g.fillStyle = color;
+        g.fillStyle = color
         g.fill()
         g.closePath()
     }
