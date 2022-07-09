@@ -12,9 +12,13 @@ window.onload = () => {
     ]
 
     function paintSpline(pn) {
-        let tn = [
-            0, 1, 2, 3
-        ]
+        let tn = [0]
+
+        let straightDistance = 0
+        for (let index = 0; index < 3; ++index) {
+            straightDistance += distance(pn[index], pn[index + 1])
+            tn.push(straightDistance)
+        }
 
         let s = spline(...pn, ...tn)
 
@@ -46,6 +50,12 @@ window.onload = () => {
         g.fillStyle = color;
         g.fill()
         g.closePath()
+    }
+
+    function distance(a, b) {
+        let dx = b.x - a.x
+        let dy = b.y - a.y
+        return Math.sqrt(dx * dx + dy * dy)
     }
 }
 
