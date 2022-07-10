@@ -1,50 +1,27 @@
 window.onload = () => {
     let screen = document.getElementById('screen')
-    let g = screen.getContext('2d')
+    let context = screen.getContext('2d')
+    let graphics = new Graphics(context)
 
+    // let allPoints = [
+    //     point(125, 125),
+    //     point(200, 175),
+    //     point(225, 125),
+    //     point(275, 225),
+    //     point(275, 525)
+    // ]
 
-    let allPoints = [
-        point(125, 125),
-        point(200, 175),
-        point(225, 125),
-        point(275, 225),
-        point(275, 525)
-    ]
+    let allPoints = []
 
-    function paintSpline(pn) {
-        let tn = [0]
-
-        let straightDistance = 0
-        for (let index = 0; index < 3; ++index) {
-            straightDistance += distance(pn[index], pn[index + 1])
-            tn.push(straightDistance)
-        }
-
-        let s = spline(...pn, ...tn)
-
-        g.beginPath()
-        g.moveTo(pn[1].x, pn[1].y)
-        for (let t = tn[1]; t < tn[2]; t += 3) {
-            let p = s.c(t)
-            g.lineTo(p.x, p.y)
-        }
-        g.lineTo(pn[2].x, pn[2].y)
-        g.strokeStyle = 'orange'
-        g.lineWidth = 3
-        g.stroke()
-        g.closePath()
-
-        let dotColor = '#33339933'
-        dot(pn[1], dotColor, 5)
-        for (let t = tn[1]; t < tn[2]; t += 20) {
-            let p = s.c(t)
-            dot(p, dotColor, 5)
-        }
-        dot(pn[2], dotColor, 5)
+    let numberOfCorners = Math.round(Math.random() * 12) + 3
+    for (let index = 0; index < numberOfCorners; ++index) {
+        let x = Math.random() * 800
+        let y = Math.random() * 800
+        allPoints.push(point(x, y))
     }
 
     for (let n = 0; n < allPoints.length; ++n) {
-        dot(allPoints[n], '#000000', 12)
+        graphics.dot(allPoints[n], '#000000', 12)
     }
 
     for (let pointIndex = 0; pointIndex < allPoints.length; ++pointIndex) {
@@ -53,39 +30,7 @@ window.onload = () => {
             let subIndex = (pointIndex + offset) % allPoints.length
             pn.push(allPoints[subIndex])
         }
-        paintSpline(pn)
-    }
-
-    function point(x, y) {
-        return {x, y}
-    }
-
-    function dot(p, color, r) {
-        g.beginPath()
-        g.arc(p.x, p.y, r, 0, 2 * Math.PI)
-        g.fillStyle = color
-        g.fill()
-        g.closePath()
-    }
-
-    function distance(a, b) {
-        let dx = b.x - a.x
-        let dy = b.y - a.y
-        return Math.sqrt(dx * dx + dy * dy)
-    }
-}
-
-function mul(vector, scalar) {
-    return {
-        x: vector.x * scalar,
-        y: vector.y * scalar
-    }
-}
-
-function add(a, b) {
-    return {
-        x: a.x + b.x,
-        y: a.y + b.y
+        paintSpline(pn, graphics)
     }
 }
 
@@ -94,36 +39,4 @@ function interpolate(a, b, ta, tb, t) {
         mul(a, (tb - t) / (tb - ta)),
         mul(b, (t - ta) / (tb - ta))
     )
-}
-
-function spline(p0, p1, p2, p3, t0, t1, t2, t3) {
-    function a1(t) {
-        return interpolate(p0, p1, t0, t1, t)
-    }
-
-    function a2(t) {
-        return interpolate(p1, p2, t1, t2, t)
-    }
-
-    function a3(t) {
-        return interpolate(p2, p3, t2, t3, t)
-    }
-
-    function b2(t) {
-        return interpolate(a1(t), a2(t), t0, t2, t)
-    }
-
-    function b3(t) {
-        return interpolate(a2(t), a3(t), t1, t3, t)
-    }
-
-    function c(t) {
-        return interpolate(b2(t), b3(t), t1, t2, t)
-    }
-
-    return {
-        a1, a2, a3,
-        b2, b3,
-        c
-    }
 }
