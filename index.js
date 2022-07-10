@@ -17,7 +17,21 @@ window.onload = () => {
         context.clearRect(0, 0, screen.width, screen.height);
 
         for (let n = 0; n < allPoints.length; ++n) {
-            graphics.dot(allPoints[n], '#000000', 12)
+            let dotColor
+            switch (n) {
+                case 0:
+                    dotColor = 'red'
+                    break
+                case 1:
+                    dotColor = 'green'
+                    break
+                case 2:
+                    dotColor = 'blue'
+                    break
+                default:
+                    dotColor = 'black'
+            }
+            graphics.dot(allPoints[n], dotColor, 12)
         }
 
         for (let pointIndex = 0; pointIndex < allPoints.length; ++pointIndex) {
