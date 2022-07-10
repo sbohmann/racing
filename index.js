@@ -54,4 +54,9 @@ window.onload = () => {
         mousePoint = point(event.offsetX, event.offsetY)
         paint()
     }
+
+    screen.onmouseleave = () => {
+        mousePoint = undefined
+        paint()
+    }
 }
