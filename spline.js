@@ -43,3 +43,10 @@ function add(a, b) {
         y: a.y + b.y
     }
 }
+
+function interpolate(a, b, ta, tb, t) {
+    return add(
+        mul(a, (tb - t) / (tb - ta)),
+        mul(b, (t - ta) / (tb - ta))
+    )
+}
