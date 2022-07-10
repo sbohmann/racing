@@ -27,7 +27,7 @@ window.onload = () => {
                 let subIndex = (pointIndex + offset) % allPoints.length
                 pn.push(allPoints[subIndex])
             }
-            paintSpline(pn, graphics)
+            paintSpline(splinePoints(pn), graphics)
         }
 
         if (mousePoint !== undefined) {
