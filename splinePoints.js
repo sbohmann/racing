@@ -17,6 +17,8 @@ function splinePoints(pn) {
     }
     points.push(pn[2])
 
+    addDistanceToPoints(points)
+
     let highlightedPoints = []
     highlightedPoints.push(pn[1])
     for (let t = tn[1]; t < tn[2]; t += 20) {
